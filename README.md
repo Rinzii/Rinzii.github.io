@@ -1,4 +1,4 @@
 iangame4.github.io
 ==================
 
-A Tumblr Theme By Ian
+A personal website by Ian.
