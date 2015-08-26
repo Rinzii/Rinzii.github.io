@@ -89,8 +89,8 @@ Main components
   float: right;
   margin-right: 5%;
   width: 44px;
-  height: 100%;
-  background: url("../img/cd-icon-menu.svg") no-repeat center center;
+  height: 100%;/* Ian Pike */
+  background: url("http://codyhouse.co/demo/alternate-fixed-scroll-background/img/cd-icon-menu.svg") no-repeat center center;
   background-size: 44px 44px;
   cursor: pointer;
 }
@@ -201,17 +201,17 @@ Main components
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   color: white;
 }
-.cd-fixed-bg.cd-bg-1 {
-  background-image: url("../img/cd-background-1.jpg");
+.cd-fixed-bg.cd-bg-1 { /* ../img/cd-background-1.jpg */ /* Ian Pike*/
+  background-image: url("http://codyhouse.co/demo/alternate-fixed-scroll-background/img/cd-background-1.jpg");
 }
 .cd-fixed-bg.cd-bg-2 {
-  background-image: url("../img/cd-background-2.jpg");
+  background-image: url("http://codyhouse.co/demo/alternate-fixed-scroll-background/img/cd-background-2.jpg");
 }
 .cd-fixed-bg.cd-bg-3 {
-  background-image: url("../img/cd-background-3.jpg");
+  background-image: url("http://codyhouse.co/demo/alternate-fixed-scroll-background/img/cd-background-3.jpg");
 }
 .cd-fixed-bg.cd-bg-4 {
-  background-image: url("../img/cd-background-4.jpg");
+  background-image: url("http://codyhouse.co/demo/alternate-fixed-scroll-background/img/cd-background-4.jpg");
 }
 @media only screen and (min-width: 768px) {
   .cd-fixed-bg h1, .cd-fixed-bg h2 {
