@@ -182,7 +182,7 @@ Main components
   background-position: center center;
   z-index: 1;
 }
-.cd-fixed-bg h1, .cd-fixed-bg h2 {
+.cd-fixed-bg h1, .cd-fixed-bg h2, .cd-fixed-bg h3 {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -217,6 +217,9 @@ Main components
   .cd-fixed-bg h1, .cd-fixed-bg h2 {
     font-size: 36px;
   }
+  .cd-fixed-bg h3 {
+    font-size: 28px;
+  }
 }
 @media only screen and (min-width: 1170px) {
   .cd-fixed-bg {
@@ -225,6 +228,10 @@ Main components
   .cd-fixed-bg h1, .cd-fixed-bg h2 {
     font-size: 48px;
     font-weight: 300;
+  }
+  .cd-fixed-bg h3 {
+    font-size: 40;
+    font-weight: 250;
   }
 }
 
