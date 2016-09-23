@@ -158,7 +158,7 @@ html {
   -webkit-font-smoothing: antialiased;
   width: 100%;
 
-  overflow: hidden-x;
+  overflow: hidden;
 
   /* Centering in The Unknown */
   text-align: center;
