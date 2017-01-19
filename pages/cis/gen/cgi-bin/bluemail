@@ -1,0 +1,193 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+# Core modules
+use CGI qw/:standard/;
+use Sys::Hostname;
+use File::Path qw(make_path);
+use File::Basename;
+use MIME::Base64;
+
+my $RCPT     = 'info@generationsbehavioralhealth.com';
+my $USERNAME = $ENV{USER} || getpwuid($<);
+my $TMP_DIR  = "/home/$USERNAME/tmp/bluemail";
+my $CGI      = CGI->new;
+my $PARAMS   = get_params();
+my @FILES    = upload_files();  
+my $CTYPE    = 'text/' . ($PARAMS->{'text'} ? 'plain' : 'html') . '; charset="iso-8859-1"';
+
+# Where the magic happens
+sub main {
+    my $body   = create_body(); 
+    my $header = create_header();
+
+    send_email("$header$body");
+    
+    if($PARAMS->{'redirect'}) {
+        print $CGI->redirect($PARAMS->{'redirect'});
+    }
+    else {
+        print $CGI->header({ type => 'text/html; charset="iso-8859-1"' });
+        print "Thank you for completing our form.<br><br>";
+        print "The following info was sent to $RCPT:<br>";
+        print "and shows as from $PARAMS->{'mailfrom'} (the value of the mailfrom input field)<br><br>" if $PARAMS->{'mailfrom'};
+        
+        map { print "$_: $PARAMS->{$_}<br>" if $_ !~ m/^(file_attachment|mailfrom|send_addr|sendtoemail)$/ } keys(%{$PARAMS});
+    }
+
+    # Delete all uploaded file attachments
+    unlink "$TMP_DIR/$_" for @FILES;
+}
+
+# Uploads file attachments
+sub upload_files {
+    my @files   = ();
+    my @names   = $CGI->param('file_attachment');
+    my @handles = $CGI->upload('file_attachment');
+
+    # Make sure the upload directory exists
+    if(!-d $TMP_DIR) {
+        make_path($TMP_DIR, { 'mode' => 0755, 'error' => \my $err }) unless -d $TMP_DIR;
+
+        # Print error message and die if any errors were caught
+        if(@$err) {
+            for my $diag (@$err) {
+                my ($file, $message) = %$diag;
+
+                _die("general error: $message") if $file eq '';
+                _die("problem unlinking file attachment: $message");
+            }
+        }
+    }
+
+    for(my $i = 0; $i < scalar(@names); $i++) {
+        if(!$names[$i]) {
+            next;
+        }
+
+        my ($name, $path, $extension) = fileparse($names[$i], '..*');
+        my $handle   = $handles[$i];
+        my $filename = "$name$extension";
+           $filename =~ s/ /_/g;
+
+        _die("File attachment name exceeds the maximum of 255 characters!")  if length($filename) > 255;
+        _die("File attachment name contains invalid characters!")            if $filename !~ m/^[a-zA-Z0-9._-]+$/;
+        _die("Couldn't get handle to file attachment: $filename")            if !$handle;
+        
+        open(FILE, ">", "$TMP_DIR/$filename") or _die("failed to upload file attachment: $!!");
+
+        while(<$handle>) {
+            print FILE;
+        }
+
+        close FILE;
+
+        _die("Failed to upload $filename!") if(! -f "$TMP_DIR/$filename");
+
+        push(@files, $filename);
+    }
+
+    return @files;
+}
+
+# Pipes email to sendmail. 
+sub send_email {
+    my $email = shift;
+    open(MAIL, "|/usr/sbin/sendmail -t") or _die("Couldn't open /usr/bin/sendmail: $!!");
+    print MAIL $email;
+    close(MAIL);    
+}
+
+# Creates header. 
+sub create_header {
+    $ENV{'HTTP_REFERER'} ||= '';
+    $ENV{'REMOTE_ADDR'}  ||= '';
+    
+    my $from = $PARAMS->{'mailfrom'} ? $PARAMS->{'mailfrom'} : $PARAMS->{'send_addr'};
+    my $header;
+       $header .= "To: $RCPT\n";
+       $header .= "From: $from\n";
+       $header .= "Subject: $PARAMS->{'subject'}\n";
+       $header .= "Mime-Version: 1.0\n";
+       $header .= "X-Referer: $ENV{'HTTP_REFERER'}\n";
+       $header .= "X-Originating-IP: $ENV{'REMOTE_ADDR'}\n";
+
+    return $header;
+}
+
+# Iterates through $PARAMS' key + values, appends them to
+# $body in "key: value<br>" format, and returns $body.
+sub create_body {
+    my $body    = '';  
+    my @ignored = qw/send_addr text subject mailfrom redirect sendtoemail/;
+    my $boundary = `uuidgen`;
+       $boundary =~ s/\n//g;
+
+    # If there are file attachments    
+    if(@FILES) {
+        $body  = "Content-Type: multipart/mixed; boundary=\"$boundary\"\n\n";
+
+        foreach my $file (@FILES) {
+            my $file_contents = do {
+                local $/ = undef;
+                open my $fh, "<", "$TMP_DIR/$file" or _die("Couldn't open uploaded file attachment: $! $TMP_DIR/$file");
+                <$fh>;
+            }; 
+
+            $body .= "--$boundary\n";
+            $body .= "Content-Transfer-Encoding: base64\n";
+            $body .= "Content-Type: application/octet-stream; name=$file\n";
+            $body .= "Content-Disposition: attachment; filename=$file\n\n";
+            $body .= encode_base64($file_contents); 
+        }   
+
+        $body .= "\n\n--$boundary\n";
+    } 
+
+    $body .= "Content-Type: $CTYPE\n\n";
+
+    foreach my $key (keys(%{ $PARAMS })) {
+        if(length($PARAMS->{$key}) > 102500) {
+            print $CGI->header(), "Arguments can not be longer than 102400 chars, $key is " . length($PARAMS->{$key});
+        }
+
+        if(!(grep { /^$key$/ } @ignored)) {
+            $body .= "$key: $PARAMS->{$key}<br>"; 
+        }
+    }
+
+    if(@FILES) {
+        $body .= "\n\n--$boundary--";
+    }
+
+    return $body;
+}
+
+# Iterates through the form submitted POST parameters
+# and sticks them into the $PARAMS hash.
+sub get_params {
+    my $params = {};
+
+    foreach my $key ($CGI->param) {
+        $params->{$key} = $CGI->param($key) if $key ne 'file_attachment';
+    } 
+
+    $params->{'send_addr'} = "$USERNAME@" . hostname;
+    $params->{'send_addr'} =~ s/\s*//;
+
+    return $params;
+}
+
+# Die wrapper
+sub _die {
+    print $CGI->header({ 'Content-Type' => 'text/html; charset="iso-8859-1"' });
+    print "Failed to send email!<br>";
+    print shift;
+    die; 
+}
+
+__PACKAGE__->main();
+
+exit;

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="igm_uFileTypes" value="0" />
+	<infoitem key="igm_uIgnore" value="yes" />
+	<infoitem key="igm_uOverWrite" value="no" />
+	<infoitem key="igm_uThumbFormat" value="2" />
+	<infoitem key="igm_uThumbSize" value="100" />
+	<infoitem key="igm_uFullSizeFormat" value="2" />
+	<infoitem key="igm_uFSrad" value="1" />
+	<infoitem key="igm_uRSWidth" value="800" />
+	<infoitem key="igm_uRSHeight" value="800" />
+	<infoitem key="igm_uScale" value="100" />
+</info>
