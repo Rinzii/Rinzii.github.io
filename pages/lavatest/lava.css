@@ -1,0 +1,9 @@
+body {
+  background: black;
+  text-align: center;
+  height: 100vh;
+}
+
+svg {
+  margin: auto;
+}
