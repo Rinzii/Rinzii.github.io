@@ -1,0 +1,57 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+header {
+    background: url(../img/Slide.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    color: #fff;
+    .header-content {
+        padding: 250px 0;
+        h1 {
+            font-size: 56px;
+            text-transform: uppercase;
+            font-weight: 300;
+            letter-spacing: 5px;
+            span {
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.docs {
+    padding: 20px 0;
+    h1 {
+        font-size: 46px;
+        font-weight: 700;
+    }
+    p {
+        font-size: 16px;
+        width: 80%;
+    }
+    ul {
+        margin-top: 20px;
+        .is-folder {
+            font-size: 14px;
+            text-transform: uppercase;
+            i {
+                color: #28c;
+                margin-right: 15px;
+            }
+            ul {
+                margin-top: 10px;
+                padding-left: 30px;
+                i {
+                    color: #4b5;
+                }
+                li {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+    }
+}
