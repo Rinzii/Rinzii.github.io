@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="homepage.css">
+    <link rel="stylesheet" type="text/css" href="homepage.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<canvas id="bgCanvas"></canvas>
-
-<script type="text/javascript" src="homepage.js"></script>
+    <canvas id="bgCanvas"></canvas>
+    <div id="wrapper">
+      <div class="menu">
+        <h1>navbar</h1>
+        <ul>
+           <li><a href="#home"><i class="fa fa-terminal"></i>home</a></li>
+           <li><a href="#about"><i class="fa fa-codepen"></i>about</a></li>
+           <li><a href="#news"><i class="fa fa-newspaper-o"></i>news</a></li>
+           <li><a href="#contact"><i class="fa fa-paper-plane-o"></i>contact</a></li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="button">
+          <div class="line first top"></div>
+          <div class="line second bottom"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="background.js"></script>
+    <script type="text/javascript">
+        function expand(){
+            $(this).toggleClass("on");
+            $(".menu").toggleClass("active");
+        };
+        $(".button").on('click', expand);
+    </script>
 </body>
 </html>

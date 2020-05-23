@@ -170,3 +170,9 @@ entities.push(new Terrain({displacement : 120, scrollDelay : 50, fillStyle : "rg
       requestAnimationFrame(animate);
   }
   animate();
+
+function expand(){
+  $(this).toggleClass("on");
+  $(".menu").toggleClass("active");
+};
+$(".button").on('click', expand);
