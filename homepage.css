@@ -1,4 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,300);
+/*
+:root {
+
+}
+*/
 
 body,
 html {
@@ -72,9 +77,11 @@ a:hover {
   text-decoration: line-through;
 }
 
-.content {
-  position: relative;
+.header-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   width: 400px;
+  gap: 20px;
 }
 
 .line {
