@@ -1,35 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Button</title>
     <link rel="stylesheet" type="text/css" href="homepage.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <canvas id="bgCanvas"></canvas>
+
+    <!-- Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Wrapper for Content -->
     <div id="wrapper">
-      <div class="menu">
-        <h1>navbar</h1>
-        <ul>
-           <li><a href="#home"><i class="fa fa-terminal"></i>home</a></li>
-           <li><a href="#resume"><i class="fa fa-codepen"></i>resume</a></li>
-           <li><a href="#portfolio"><i class="fa fa-newspaper-o"></i>portfolio</a></li>
-           <li><a href="#contact"><i class="fa fa-paper-plane-o"></i>contact</a></li>
-        </ul>
-      </div>
-      <div class="content">
-        <div class="button">
-          <div class="line first top"></div>
-          <div class="line second bottom"></div>
+        <!-- Sidebar Menu -->
+        <div class="menu">
+            <h1>Navbar</h1>
+            <ul>
+                <li><a href="#home"><i class="fa fa-terminal"></i> Home</a></li>
+                <li><a href="#resume"><i class="fa fa-codepen"></i> Resume</a></li>
+                <li><a href="#portfolio"><i class="fa fa-newspaper-o"></i> Portfolio</a></li>
+                <li><a href="#contact"><i class="fa fa-paper-plane-o"></i> Contact</a></li>
+            </ul>
         </div>
-      </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="button">
+                <div class="line first top"></div>
+                <div class="line second bottom"></div>
+            </div>
+        </div>
     </div>
+
     <script type="text/javascript" src="background.js"></script>
-    <script type="text/javascript">
-        function expand(){
-            $(this).toggleClass("on");
-            $(".menu").toggleClass("active");
-        };
-        $(".button").on('click', expand);
-    </script>
+    <script type="text/javascript" src="navigation.js"></script>
 </body>
 </html>
