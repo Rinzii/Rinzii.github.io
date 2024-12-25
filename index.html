@@ -3,38 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Button</title>
+    <title>Ian Pike</title>
     <link rel="stylesheet" type="text/css" href="homepage.css">
+    <link rel="icon" href="icon.png" type="image/png">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
 
-    <!-- Background Canvas -->
-    <canvas id="bg-canvas"></canvas>
-
-    <!-- Wrapper for Content -->
-    <div id="wrapper">
-        <!-- Sidebar Menu -->
-        <div class="menu">
-            <h1>Check me out</h1>
+    <!-- Fullscreen Canvas Section -->
+    <section id="main-page">
+        <canvas id="bg-canvas"></canvas>
+        <header class="main-header">
             <ul>
-                <li><a href="#home"><i class="fa fa-terminal"></i> Home</a></li>
-                <li><a href="#resume"><i class="fa fa-codepen"></i> Resume</a></li>
-                <li><a href="#portfolio"><i class="fa fa-newspaper-o"></i> Portfolio</a></li>
-                <li><a href="#contact"><i class="fa fa-paper-plane-o"></i> Contact</a></li>
+                <li><a href="#work">Works</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-        </div>
-
-        <!-- Main Content -->
-        <div class="header-content">
-            <div class="button">
-                <div class="line first top"></div>
-                <div class="line second bottom"></div>
+        </header>
+        <div class="content-wrapper">
+            <div class="centered-content">
+                <h1>Hello there,</h1>
+                <h2>I'm <span class="highlight">Ian Pike</span></h2>
+                <p>Student Software Engineer</p>
+            </div>
+            <div class="profile-image-wrapper">
+                <img src="https://avatars.githubusercontent.com/u/6411222?v=4" type="image/png" alt="Profile Image" class="profile-image">
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="works-section">
+        <h1>Works</h1>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </section>
+
+    <section id="about-section">
+        <h1>About Me</h1>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </section>
+
+    <section id="contact-section">
+        <h1>Contact</h1>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+    </section>
 
     <script type="text/javascript" src="background.js"></script>
-    <script type="text/javascript" src="navigation.js"></script>
 </body>
 </html>
+

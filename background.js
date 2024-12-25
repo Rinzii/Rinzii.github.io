@@ -1,243 +1,318 @@
 (function () {
-    // Polyfill for requestAnimationFrame to ensure compatibility with older browsers.
-    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
-        window.setTimeout(callback, 1000 / 60); // Fallback to setTimeout for 60 FPS.
-    };
+    // Polyfill for requestAnimationFrame
+    var requestAnimationFrame = window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame 
+        || window.webkitRequestAnimationFrame 
+        || window.msRequestAnimationFrame 
+        || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-// Set up the background canvas and its dimensions.
+// ============================================================
+// Global canvas, context, and sizing
+// ============================================================
 var background = document.getElementById("bg-canvas"),
-    bgCtx = background.getContext("2d"), // Get the 2D drawing context.
-    width = window.innerWidth, // Full width of the window.
-    height = document.body.offsetHeight; // Height of the document body.
+    bgCtx = background.getContext("2d"),
+    width = window.innerWidth,
+    height = document.body.offsetHeight;
 
-// Ensure a minimum height of 400px for the canvas.
 (height < 400) ? height = 400 : height;
 
-// Set canvas dimensions to match the window size.
 background.width = width;
 background.height = height;
 
-// Function to calculate the bottom position of the dropdown menu.
+// ============================================================
+// Helper function to find how low the dropdown sits
+// ============================================================
 function calculateDropdownBottom() {
-    var dropdownItems = document.querySelectorAll(".menu li"); // Get all list items in the menu.
+    var dropdownItems = document.querySelectorAll(".menu li");
     if (dropdownItems.length === 0) {
-        return height; // If no dropdown exists, default to full height.
+        return height;
     }
-
-    var lastItem = dropdownItems[dropdownItems.length - 1]; // Get the last item in the dropdown.
-    var rect = lastItem.getBoundingClientRect(); // Get the bounding box of the last item.
-    return rect.bottom + window.scrollY; // Return the bottom position relative to the document.
+    var lastItem = dropdownItems[dropdownItems.length - 1];
+    var rect = lastItem.getBoundingClientRect();
+    return rect.bottom + window.scrollY;
 }
 
-// Constructor function for the Terrain object.
+// ============================================================
+// Terrain Constructor
+// ============================================================
 function Terrain(options) {
-    options = options || {}; // Default options if none are provided.
-    this.terrain = document.createElement("canvas"); // Create a new canvas element for the terrain.
-    this.terCtx = this.terrain.getContext("2d"); // Get the 2D context for the terrain canvas.
-    this.scrollDelay = options.scrollDelay || 90; // Delay between scrolling updates.
-    this.lastScroll = new Date().getTime(); // Timestamp of the last scroll.
+    options = options || {};
 
-    this.terrain.width = width; // Set terrain canvas width.
-    this.terrain.height = height; // Set terrain canvas height.
-    this.fillStyle = options.fillStyle || "#191D4C"; // Default fill color for the terrain.
+    // We'll store the current width/height in the terrain instance.
+    this.width = width;
+    this.height = height;
 
-    // Determine the maximum height of the terrain, ensuring it does not overlap critical elements.
-    this.maxHeight = Math.max(height * 2 / 5, calculateDropdownBottom() - 10); // 2/5 of screen height or below the dropdown.
-    this.mHeight = Math.min(options.mHeight || height, this.maxHeight); // Ensure mHeight does not exceed maxHeight.
+    this.terrain = document.createElement("canvas");
+    this.terCtx = this.terrain.getContext("2d");
+    this.scrollDelay = options.scrollDelay || 90;
+    this.lastScroll = new Date().getTime();
+    this.fillStyle = options.fillStyle || "#000000";
+    this.displacement = options.displacement || 140;
 
-    // Generate terrain points using the midpoint displacement algorithm.
+    // Set initial canvas size
+    this.terrain.width = this.width;
+    this.terrain.height = this.height;
+
+    // Calculate maxHeight and mHeight
+    this.maxHeight = Math.max(this.height * 2 / 5, calculateDropdownBottom() - 10);
+    this.mHeight = Math.min(options.mHeight || this.height, this.maxHeight);
+
+    // Initialize the points array
     this.points = [];
 
-    var displacement = options.displacement || 140, // Initial displacement for randomness.
-        power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))); // Ensure points array length is a power of 2.
+    // Generate the terrain
+    this.generatePoints();
 
-    // Initialize the start and end heights for the terrain.
+    // Append the new canvas to the DOM
+    document.body.appendChild(this.terrain);
+}
+
+// ------------------------------------------------------------
+// Generate the terrain points (midpoint displacement)
+// ------------------------------------------------------------
+Terrain.prototype.generatePoints = function() {
+    // Clear out any old points
+    this.points.length = 0;
+
+    // Power-of-2 length
+    var power = Math.pow(2, Math.ceil(Math.log(this.width) / Math.log(2)));
+
+    // Start & end at mHeight
     this.points[0] = this.mHeight;
     this.points[power] = this.points[0];
 
-    // Recursively generate intermediate points.
+    // Local displacement so we don't override this.displacement
+    var d = this.displacement;
+
+    // Recursively generate intermediate points
     for (var i = 1; i < power; i *= 2) {
         for (var j = (power / i) / 2; j < power; j += power / i) {
-            this.points[j] = ((this.points[j - (power / i) / 2] + this.points[j + (power / i) / 2]) / 2) + Math.floor(Math.random() * -displacement + displacement);
+            this.points[j] = (
+                (this.points[j - (power / i) / 2] + this.points[j + (power / i) / 2]) / 2
+            ) + Math.floor(Math.random() * -d + d);
         }
-        displacement *= 0.6; // Reduce displacement for finer detail.
+        d *= 0.6; 
     }
+};
 
-    document.body.appendChild(this.terrain); // Append the terrain canvas to the document body.
-}
-
-// Method to update and redraw the terrain.
+// ------------------------------------------------------------
+// Update/draw terrain each frame
+// ------------------------------------------------------------
 Terrain.prototype.update = function () {
-    // Clear the canvas before redrawing.
-    this.terCtx.clearRect(0, 0, width, height);
-    this.terCtx.fillStyle = this.fillStyle; // Set the fill style.
+    this.terCtx.clearRect(0, 0, this.width, this.height);
+    this.terCtx.fillStyle = this.fillStyle;
 
-    // Scroll the terrain if enough time has passed.
+    // Scroll effect
     if (new Date().getTime() > this.lastScroll + this.scrollDelay) {
-        this.lastScroll = new Date().getTime(); // Update the last scroll time.
-        this.points.push(this.points.shift()); // Scroll by shifting points in the array.
+        this.lastScroll = new Date().getTime();
+        // Shift the points to "scroll" terrain
+        this.points.push(this.points.shift());
     }
 
-    this.terCtx.beginPath(); // Begin drawing the terrain.
-    for (var i = 0; i <= width; i++) {
+    // Draw the polygon
+    this.terCtx.beginPath();
+    for (var i = 0; i <= this.width; i++) {
         if (i === 0) {
-            this.terCtx.moveTo(0, this.points[0]); // Start at the first point.
+            this.terCtx.moveTo(0, this.points[0]);
         } else if (this.points[i] !== undefined) {
-            this.terCtx.lineTo(i, this.points[i]); // Draw a line to the next point.
+            this.terCtx.lineTo(i, this.points[i]);
         }
     }
-
-    // Close the terrain shape and fill it.
-    this.terCtx.lineTo(width, this.terrain.height);
-    this.terCtx.lineTo(0, this.terrain.height);
+    this.terCtx.lineTo(this.width, this.height);
+    this.terCtx.lineTo(0, this.height);
     this.terCtx.lineTo(0, this.points[0]);
     this.terCtx.fill();
-}
+};
 
-// Set up the background canvas for the stars.
-bgCtx.fillStyle = '#05004c'; // Background color for the sky.
-bgCtx.fillRect(0, 0, width, height); // Fill the entire canvas.
-
+// ============================================================
+// Star constructor
+// ============================================================
 const DEFAULT_INITIAL_STAR_SIZE = 3;
-
-// Constructor function for the Star object.
 function Star(options) {
-    this.size = Math.random() * DEFAULT_INITIAL_STAR_SIZE; // Random size for the star.
-    this.speed = Math.random() * .05; // Random horizontal speed.
-    this.x = options.x; // Initial x-coordinate.
-    this.y = options.y; // Initial y-coordinate.
+    this.size = Math.random() * DEFAULT_INITIAL_STAR_SIZE;
+    this.speed = Math.random() * 0.05;
+    this.x = options.x;
+    this.y = options.y;
 }
 
-// Reset the star's position when it moves off-screen.
 Star.prototype.reset = function () {
-    this.size = Math.random() * 2; // Reset the size.
-    this.speed = Math.random() * .05; // Reset the speed.
-    this.x = width; // Place it at the right edge of the canvas.
-    this.y = Math.random() * height; // Randomize its vertical position.
-}
+    this.size = Math.random() * 2;
+    this.speed = Math.random() * 0.05;
+    this.x = width;
+    this.y = Math.random() * height;
+};
 
-// Update the star's position and draw it.
 Star.prototype.update = function () {
-    this.x -= this.speed; // Move the star left.
+    this.x -= this.speed;
     if (this.x < 0) {
-        this.reset(); // Reset the star if it moves off-screen.
+        this.reset();
     } else {
-        bgCtx.fillRect(this.x, this.y, this.size, this.size); // Draw the star.
+        bgCtx.fillRect(this.x, this.y, this.size, this.size);
     }
-}
+};
 
+// ============================================================
+// Shooting Star constructor
+// ============================================================
+const DEFAULT_MIN_ANGLE = 100;
+const DEFAULT_MAX_ANGLE = 160;
+const RANDOM_LENGTH_MIN = 10;
+const RANDOM_LENGTH_MAX = 80;
+const SPEED_MIN = 6;
+const SPEED_MAX = 14;
+const SIZE_MIN = 0.1;
+const SIZE_MAX = 1;
+const WAIT_TIME_MIN = 1000;
+const WAIT_TIME_MAX = 5000;
 
-// Constants for ShootingStar properties
-const DEFAULT_MIN_ANGLE = 100; // Default minimum angle in degrees
-const DEFAULT_MAX_ANGLE = 160; // Default maximum angle in degrees
-const RANDOM_LENGTH_MIN = 10; // Minimum length of the shooting star trail
-const RANDOM_LENGTH_MAX = 80; // Maximum additional length of the shooting star trail
-const SPEED_MIN = 6; // Minimum speed of the shooting star
-const SPEED_MAX = 14; // Maximum additional speed of the shooting star
-const SIZE_MIN = 0.1; // Minimum size (thickness) of the shooting star trail
-const SIZE_MAX = 1; // Maximum additional size of the shooting star trail
-const WAIT_TIME_MIN = 1000; // Minimum wait time before the shooting star becomes active (in milliseconds)
-const WAIT_TIME_MAX = 5000; // Maximum additional wait time (in milliseconds)
-
-// Constructor function for the ShootingStar object.
 function ShootingStar() {
-    // Angle of attack range (in degrees) with min and max constraints
-    // The angle of attack is defined as such:
-    // If you were to shoot a line straight down that would be at 90 degrees
-    // If you subtracted 45 degrees from the angle the line would pivot from the observers right.
-    // If you added 45 degrees from the angle the line would pivot from the observers left.
-    // Min and max just define the range the defined angle of attack can be set in    
-    this.minAngle = DEFAULT_MIN_ANGLE; // Default minimum angle in degrees
-    this.maxAngle = DEFAULT_MAX_ANGLE; // Default maximum angle in degrees
+    this.minAngle = DEFAULT_MIN_ANGLE;
+    this.maxAngle = DEFAULT_MAX_ANGLE;
 
-    const angleInRadians = (Math.random() * (this.maxAngle - this.minAngle) + this.minAngle) * (Math.PI / 180); // Convert degrees to radians
+    const angleInRadians = (
+        Math.random() * (this.maxAngle - this.minAngle) + this.minAngle
+    ) * (Math.PI / 180);
+
     this.direction = { 
-        x: Math.cos(angleInRadians), // Calculate x-component from the angle
-        y: Math.sin(angleInRadians)  // Calculate y-component from the angle
+        x: Math.cos(angleInRadians),
+        y: Math.sin(angleInRadians)
     };
-    this.reset(); // Initialize properties
+    this.reset();
 }
 
-// Reset the shooting star's properties.
 ShootingStar.prototype.reset = function () {
-    this.x = Math.random() * width; // Random starting x-coordinate.
-    this.y = 0; // Start at the top of the canvas.
-    this.len = (Math.random() * RANDOM_LENGTH_MAX) + RANDOM_LENGTH_MIN; // Random length.
-    this.speed = (Math.random() * SPEED_MAX) + SPEED_MIN; // Fixed speed.
-    this.size = (Math.random() * SIZE_MAX) + SIZE_MIN; // Random thickness.
-    this.waitTime = new Date().getTime() + (Math.random() * WAIT_TIME_MAX) + WAIT_TIME_MIN; // Wait time before appearing.
-    this.active = false; // Initially inactive.
-}
+    this.x = Math.random() * width;
+    this.y = 0;
+    this.len = (Math.random() * RANDOM_LENGTH_MAX) + RANDOM_LENGTH_MIN;
+    this.speed = (Math.random() * SPEED_MAX) + SPEED_MIN;
+    this.size = (Math.random() * SIZE_MAX) + SIZE_MIN;
+    this.waitTime = new Date().getTime() + (Math.random() * WAIT_TIME_MAX) + WAIT_TIME_MIN;
+    this.active = false;
+};
 
-// Update the shooting star's position and draw it.
 ShootingStar.prototype.update = function () {
     if (this.active) {
-        this.x += this.direction.x * this.speed; // Move based on x-component of direction
-        this.y += this.direction.y * this.speed; // Move based on y-component of direction
+        this.x += this.direction.x * this.speed;
+        this.y += this.direction.y * this.speed;
 
-        // Check if the star is out of bounds
         if (this.x < 0 || this.x > width || this.y > height) {
-            this.reset(); // Reset the star if it moves off-screen
+            this.reset();
         } else {
-            // Draw the shooting star trail
-            bgCtx.lineWidth = this.size; // Set the line thickness
-            bgCtx.strokeStyle = "#ffffff"; // Set the trail color
+            bgCtx.lineWidth = this.size;
+            bgCtx.strokeStyle = "#ffffff";
             bgCtx.beginPath();
-            bgCtx.moveTo(this.x, this.y); // Start of the shooting star
+            bgCtx.moveTo(this.x, this.y);
             bgCtx.lineTo(
-                this.x - this.len * this.direction.x, // Extend the trail backward along the x direction
-                this.y - this.len * this.direction.y  // Extend the trail backward along the y direction
+                this.x - this.len * this.direction.x,
+                this.y - this.len * this.direction.y
             );
-            bgCtx.stroke(); // Render the trail
+            bgCtx.stroke();
         }
     } else {
-        // Activate the star after its wait time
+        // Activate star
         if (this.waitTime < new Date().getTime()) {
             this.active = true;
         }
     }
+};
+
+// ============================================================
+// Initialize all entities
+// ============================================================
+var entities = [];
+
+// Add stars
+function createStars() {
+    // We'll do a simple approach: create "height" # of stars
+    // so the star field feels "dense" at large heights.
+    for (var i = 0; i < height; i++) {
+        entities.push(new Star({
+            x: Math.random() * width,
+            y: Math.random() * height
+        }));
+    }
 }
+// Actually call createStars at the start
+createStars();
 
-
-
-
-
-
-
-var entities = []; // Array to hold all visual entities (stars, terrain, etc.).
-
-// Init the stars
-for (var i = 0; i < height; i++) {
-    entities.push(new Star({
-        x: Math.random() * width,
-        y: Math.random() * height
-    }));
-}
-
+// Add shooting stars
 const AMOUNT_OF_SHOOTING_STARS = 7;
-
-// Add an amount of shooting stars that just cycle.
 for (var i = 0; i < AMOUNT_OF_SHOOTING_STARS; i++) {
     entities.push(new ShootingStar());
 }
-entities.push(new Terrain({ mHeight: ((height * 2) / 5) })); // Layer 0 - 2/5 of screen
-entities.push(new Terrain({ displacement: 200, scrollDelay: 50, fillStyle: "rgb(17,20,40)", mHeight: ((height * 2) / 5) })); // Layer 1
-entities.push(new Terrain({ displacement: 250, scrollDelay: 20, fillStyle: "rgb(10,10,5)", mHeight: ((height * 2) / 5) })); // Layer 2
 
-// Animate background
+const TERRAIN_ONE = "#433D8B";
+const TERRAIN_TWO = "#17153B";
+const TERRAIN_THREE = "#2E236C";
+
+// Add terrain layers
+entities.push(new Terrain({ fillStyle: TERRAIN_ONE, mHeight: (height * 2) / 5 }));
+entities.push(new Terrain({ displacement: 200, scrollDelay: 50, fillStyle: TERRAIN_TWO, mHeight: (height * 2) / 5 }));
+entities.push(new Terrain({ displacement: 250, scrollDelay: 20, fillStyle: TERRAIN_THREE, mHeight: (height * 2) / 5 }));
+
+// ============================================================
+// Animation loop
+// ============================================================
 function animate() {
-    bgCtx.fillStyle = '#110E19';
+    bgCtx.fillStyle = '#110E19'; // Sky color
     bgCtx.fillRect(0, 0, width, height);
-    bgCtx.fillStyle = '#ffffff';
+    bgCtx.fillStyle = '#ffffff'; // Star colors
     bgCtx.strokeStyle = '#ffffff';
 
     var entLen = entities.length;
-
     while (entLen--) {
         entities[entLen].update();
     }
     requestAnimationFrame(animate);
 }
 animate();
+
+// ============================================================
+// Resize listener
+// ============================================================
+window.addEventListener('resize', function() {
+    // 1) Update global width/height
+    width = window.innerWidth;
+    height = document.body.offsetHeight;
+    (height < 400) ? height = 400 : height;
+
+    // 2) Resize main bg-canvas
+    background.width = width;
+    background.height = height;
+    bgCtx.fillStyle = '#110E19';
+    bgCtx.fillRect(0, 0, width, height);
+
+    // 3) Remove old stars from the array, re-add new ones
+    entities = entities.filter(e => !(e instanceof Star));
+    createStars();
+
+    // 4) Resize terrain canvases in place
+    entities.forEach(entity => {
+        if (entity instanceof Terrain) {
+            entity.width = width;
+            entity.height = height;
+            entity.terrain.width = width;
+            entity.terrain.height = height;
+
+            entity.maxHeight = Math.max(height * 2 / 5, calculateDropdownBottom() - 10);
+            entity.mHeight = Math.min(entity.mHeight, entity.maxHeight);
+            entity.generatePoints();
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('a[href^="#"]').on('click', function(event) {
+        var target = $($(this).attr('href'));
+        if (target.length) {
+            event.preventDefault();
+            $('html, body').animate({
+                scrollTop: target.offset().top
+            }, 1000); // Adjust speed (in ms) as needed
+        }
+    });
+});
