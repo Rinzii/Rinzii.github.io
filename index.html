@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ian Pike</title>
+    <title>Ian Pike Portfolio Site</title>
     <link rel="stylesheet" type="text/css" href="homepage.css">
     <link rel="icon" href="icon.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
@@ -15,16 +16,20 @@
         <canvas id="bg-canvas"></canvas>
         <header class="main-header">
             <ul>
-                <li><a href="#work">Works</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#works-section">Works</a></li>
+                <li><a href="#about-section">About</a></li>
+                <li><a href="#contact-section">Contact</a></li>
+            </ul>
+            <ul class="social-links">
+                <li><a href="https://github.com/Rinzii" target="_blank"><i class="fab fa-github"></i></a></li>
+                <li><a href="https://www.linkedin.com/in/ian-pike-27319083/" target="_blank"><i class="fab fa-linkedin"></i></a></li>
             </ul>
         </header>
         <div class="content-wrapper">
             <div class="centered-content">
-                <h1>Hello there,</h1>
-                <h2>I'm <span class="highlight">Ian Pike</span></h2>
-                <p>Student Software Engineer</p>
+                <h1>Hello there!</h1>
+                <h2>My name is <span class="highlight">Ian Pike.</span></h2>
+                <p>I'm a Passionate Software Engineer and Adventurer!</p>
             </div>
             <div class="profile-image-wrapper">
                 <img src="https://avatars.githubusercontent.com/u/6411222?v=4" type="image/png" alt="Profile Image" class="profile-image">
@@ -32,29 +37,234 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- Works Section -->
     <section id="works-section">
         <h1>Works</h1>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+        <div class="works-grid">
+            <!-- Work Item 1 -->
+            <div class="work-item" onclick="window.open('https://github.com/Rinzii/ccmath', '_blank');">
+                <img src="cdn/default_github_pane.jpg" alt="CCMath">
+                <div class="work-info">
+                    <h2>CCMath</h2>
+                    <p>A compile-time math library for transcendental functions written in C++17. Focused on high performance and precision for mathematical computations.</p>
+                    <p><strong>Language:</strong> C++17</p>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>Compile-time implementation of mathematical functions</li>
+                        <li>Optimized for high precision</li>
+                        <li>Extensive unit tests</li>
+                    </ul>
+                    <div class="work-links">
+                        <a href="https://github.com/Rinzii/ccmath" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Work Item 2 -->
+            <div class="work-item" onclick="window.open('https://github.com/Rinzii/genesis', '_blank');">
+                <img src="cdn/default_github_pane.jpg" alt="Genesis">
+                <div class="work-info">
+                    <h2>Genesis</h2>
+                    <p>A small Vulkan game engine written in C++20.</p>
+                    <div class="work-links">
+                        <a href="https://github.com/Rinzii/genesis" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add more work items as needed -->
+        </div>
     </section>
+    
 
+    <!-- About Section -->
     <section id="about-section">
-        <h1>About Me</h1>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+        <div class="about-container">
+            <div class="about-left-side">
+                <div class="profile-section">
+                    <div class="profile-image-wrapper">
+                        <div class="profile-image-box">
+                            <img src="https://avatars.githubusercontent.com/u/6411222?v=4" type="image/png" alt="Profile Image" class="profile-image about-profile-image-rounded">
+                        </div>
+                    </div>
+                    <a href="ianpike_cv.pdf" class="download-cv-button" target="_blank">Download CV</a>
+                </div>
+            </div>
+            <div class="about-right-side">
+                <div class="about-content">
+                    <h1>About Me</h1>
+                    <p>
+                        I'm a passionate software engineer who loves building interactive applications, solving problems, and constantly learning new technologies.
+                    </p>
+                    <div class="tabs">
+                        <button class="tab active" onclick="showTab('skills')">Skills</button>
+                        <button class="tab" onclick="showTab('experience')">Experience</button>
+                        <button class="tab" onclick="showTab('education')">Education</button>
+                        <button class="tab" onclick="showTab('awards')">Awards & Honors</button>
+                    </div>
+                    <div class="tab-content active" id="skills">
+                        <h2>Languages</h2>
+                        <ul>
+                            <li>C++</li>
+                            <li>C</li>
+                            <li>C#</li>
+                            <li>Python</li>
+                            <li>Java</li>
+                        </ul>
+                        <h2>Game Engines</h2>
+                        <ul>
+                            <li>Unreal Engine</li>
+                        </ul>
+                        <h2>Rendering APIs</h2>
+                        <ul>
+                            <li>OpenGL</li>
+                            <li>Vulkan</li>
+                        </ul>
+                    </div>
+                    <div class="tab-content hidden" id="experience">
+                        <h2>Libraries</h2>
+                        <ul>
+                            <li>
+                                <a href="https://github.com/Rinzii/ccmath" target="_blank"><strong>CCMath</strong></a>: Compile-time math library for transcendental functions (C++17) - <em>2024</em>
+                            </li>
+                            <li>
+                                <a href="https://github.com/Rinzii/mim" target="_blank"><strong>Mim</strong></a>: Linear algebra framework for real-time graphics (C++17) - <em>2023</em>
+                            </li>
+                        </ul>
+                        <h2>Tools</h2>
+                        <ul>
+                            <li>
+                                <a href="https://github.com/Rinzii/CppToCsBridge" target="_blank"><strong>CppToCsBridge</strong></a>: Code generation tool for automatic C++ to C# bindings - <em>2024</em>
+                            </li>
+                        </ul>
+                        <h2>Open Source Contributions</h2>
+                        <ul>
+                            <li>
+                                <a href="https://spacestation14.io" target="_blank"><strong>Space Station 14</strong></a>: Multiplayer game recreating the cult-classic Space Station 13 - <em>2022</em>
+                            </li>
+                            <li>
+                                <a href="https://github.com/jeremy-rifkin/libassert" target="_blank"><strong>Libassert</strong></a>: A highly advanced C++ assertion library - <em>2024</em>
+                            </li>
+                            <li>
+                                <a href="https://github.com/TCCPP/wheatley" target="_blank"><strong>Wheatley</strong></a>: Discord bot for the Together C & C++ community (TypeScript) - <em>2024</em>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tab-content hidden" id="education">
+                        <h2 class="section-title">Education</h2>
+                        <div class="education-item">
+                            <h3>Lakeland Community College</h3>
+                            <p class="graduation-date"><strong>Expected Graduation:</strong> 2026</p>
+                            <p><strong>Major:</strong> Software Engineering / Computer Science</p>
+                            <p><strong>Relevant Coursework:</strong></p>
+                            <ul class="education-list">
+                                <li>Data Structures & Algorithms</li>
+                                <li>Object-Oriented Programming</li>
+                                <li>Database Management Systems</li>
+                            </ul>
+                            <p><strong>Clubs:</strong></p>
+                            <ul class="education-list">
+                                <li>Former SkillsUSA Lakeland Chapter President and Founder</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content hidden" id="awards">
+                        <h2 class="section-title">Awards & Honors</h2>
+                        
+                        <ul class="awards-list">
+                            <li>
+                              <strong>State Champion:</strong>
+                              <span>Gold Medal in Computer Programming (2019, 2022)</span>
+                            </li>
+                            <li>
+                              <strong>National Competitor:</strong>
+                              <span>Represented Ohio in National Computer Programming Competitions</span>
+                            </li>
+                            <li>
+                              <strong>Lakeland Chapter President:</strong>
+                              <span>Founder and Former Leader</span>
+                            </li>
+                          </ul>
+                          
+                        
+                        <div class="divider"></div>
+                        
+                        <div class="awards-item">
+                            <h3>Hyland Software Hackathon</h3>
+                            <p>
+                                <strong>First Place (2020):</strong> Collaborated in a four-person team to develop an innovative Android exercise app with:
+                            </p>
+                            <ul>
+                                <li>Augmented Reality (AR) technology</li>
+                                <li>Geolocation and Google Maps API integration</li>
+                                <li>Custom-built server and API implemented in Kotlin</li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     </section>
 
+    <!-- Contact Section -->
     <section id="contact-section">
-        <h1>Contact</h1>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
+        <h1>Contact Me</h1>
+        <div class="contact-container">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-details">
+                    <strong>Email:</strong>
+                    <span id="email-link" data-user="ianpike98cs" data-domain="gmail.com">
+                        <noscript>ianpike98cs [at] gmail [dot] com</noscript>
+                    </span>
+                </div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="contact-details">
+                    <strong>Phone:</strong>
+                    <span id="phone-link" data-number="4404785936">
+                        <noscript>440-478-5936</noscript>
+                    </span>
+                </div>
+            </div>            
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fab fa-linkedin"></i>
+                </div>
+                <div class="contact-details">
+                    <strong>LinkedIn:</strong>
+                    <a href="https://www.linkedin.com/in/ian-pike-27319083/" target="_blank">View Profile</a>
+                </div>
+            </div>
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <i class="fab fa-github"></i>
+                </div>
+                <div class="contact-details">
+                    <strong>GitHub:</strong>
+                    <a href="https://github.com/Rinzii" target="_blank">View Profile</a>
+                </div>
+            </div>
+        </div>
     </section>
-
+    
+    
+    
     <script type="text/javascript" src="background.js"></script>
+    <script type="text/javascript" src="about.js"></script>
+    <script type="text/javascript" src="obfuscate.js"></script>
 </body>
 </html>
-
