@@ -631,6 +631,7 @@ canvas {
   .about-profile-image-rounded {
     width: 120px;
     height: 120px; /* Further adjust image size */
+    object-fit: cover;
   }
 }
 
