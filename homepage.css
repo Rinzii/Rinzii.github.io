@@ -24,7 +24,10 @@ canvas {
   pointer-events: none;
 }
 
+
+
 /* Header Styles */
+
 .main-header {
   position: absolute;
   top: 20px;
@@ -132,6 +135,7 @@ canvas {
   object-fit: cover; /* Ensures the image scales properly */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add a shadow for depth */
 }
+
 
 
 /* Works Section */
@@ -270,6 +274,28 @@ canvas {
   color: #ff87c3; /* Optional hover effect for links */
 }
 
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .work-item {
+    cursor: default; /* Remove pointer cursor on mobile */
+  }
+
+  .work-info {
+    position: static; /* Make the info always visible */
+    background-color: rgba(0, 0, 0, 0.9); /* Darker background for readability */
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .work-item img {
+    display: none; /* Hide the image on mobile */
+  }
+
+  .works-grid {
+    grid-template-columns: 1fr; /* Single column for smaller screens */
+  }
+}
+
 
 
 /* About Section */
@@ -304,7 +330,6 @@ canvas {
   flex: 1;
   max-width: 800px;
 }
-
 .profile-section {
   display: flex;
   flex-direction: column;
@@ -321,12 +346,28 @@ canvas {
 }
 
 .about-profile-image-rounded {
-  width: 200px;
-  height: 200px;
+  width: 300px;
+  height: 300px;
   border-radius: 15px; /* Rounded corners */
-  object-fit: contain;
+  object-fit: cover;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
   border: 1px solid #fff; /* Optional border */
+}
+
+.social-icons {
+  display: flex;
+  gap: 20px;
+  margin-top: -10px; /* Slightly overlap with the image to center visually */
+}
+
+.social-icons a {
+  font-size: 2.5rem;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #ff87c3; /* Hover color for icons */
 }
 
 .download-cv-button {
@@ -576,6 +617,23 @@ canvas {
   }
 }
 
+@media (max-width: 480px) {
+  .tabs {
+    flex-direction: column; /* Stack tabs vertically */
+    gap: 5px;
+  }
+
+  .tab {
+    font-size: 1rem; /* Reduce font size for tabs */
+    padding: 8px 15px; /* Adjust padding for smaller screens */
+  }
+
+  .about-profile-image-rounded {
+    width: 120px;
+    height: 120px; /* Further adjust image size */
+  }
+}
+
 
 /* Media queries for responsive design */
 @media (max-width: 768px) {
@@ -596,70 +654,95 @@ canvas {
 
 /* Contact Section Styling */
 #contact-section {
-  background-color: #C8ACD6; /* Updated background color */
-  color: #17153B; /* Text color for better contrast */
-  padding: 60px 20px;
+  background-color: #C8ACD6; /* Background color */
+  color: #17153B; /* Text color for contrast */
+  padding: 80px 20px; /* Extra padding for spacing */
   text-align: center;
 }
 
 #contact-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #17153B; /* Matches the text contrast */
+  font-size: 3rem; /* Larger font size for the heading */
+  margin-bottom: 40px; /* Space below the heading */
+  color: #17153B; /* Same color for heading */
+  font-weight: 600;
 }
 
 .contact-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  justify-content: center; /* Center the cards horizontally */
+  gap: 30px; /* Space between cards */
+  overflow: visible; /* Ensure hover effects are not cut off */
 }
 
 .contact-card {
-  background-color: #F5E5F7; /* Lighter card background for subtle contrast */
-  border-radius: 10px;
-  padding: 20px;
-  width: 280px;
+  background-color: #F5E5F7; /* Card background color */
+  border-radius: 15px; /* Rounded corners */
+  padding: 25px;
+  width: 280px; /* Fixed width for uniformity */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none; /* Remove underline for links */
+  color: inherit; /* Keep text color consistent */
+  position: relative; /* Ensure the hover effect works properly */
 }
 
 .contact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  transform: translateY(-8px); /* Slight lift on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+  z-index: 10; /* Ensure the card hovers above other content */
 }
+
 
 .contact-icon {
-  font-size: 2.5rem;
-  color: #17153B; /* Matches text color */
-  flex-shrink: 0;
-}
-
-.contact-details {
-  text-align: left;
-  flex: 1;
+  font-size: 3rem; /* Larger icons for visual impact */
+  color: #17153B;
+  margin-bottom: 15px; /* Space below the icon */
 }
 
 .contact-details strong {
-  font-size: 1.2rem;
-  display: block;
-  color: #17153B; /* Matches the text color */
-  margin-bottom: 5px;
+  font-size: 1.3rem; /* Slightly larger font for labels */
+  color: #17153B;
+  margin-bottom: 8px; /* Space between label and content */
+  display: block; /* Ensure label is on a separate line */
 }
 
 .contact-details a {
-  color: #5A3B6B; /* Darker shade for links */
+  color: #5A3B6B; /* Softer purple for links */
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: color 0.3s ease;
 }
 
 .contact-details a:hover {
-  color: #17153B; /* Hover matches main text color */
+  color: #17153B; /* Darker text color on hover */
 }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .contact-container {
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* Reduce gap between cards */
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-card {
+    width: 100%; /* Expand card width for smaller screens */
+    padding: 20px;
+  }
+
+  #contact-section h1 {
+    font-size: 2.5rem; /* Adjust heading size for smaller screens */
+  }
+}
+
+
+
 
 
 .obfuscated {
