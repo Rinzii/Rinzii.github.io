@@ -1,0 +1,5 @@
+# Allow all search engines to crawl the site except for the cdn directory
+User-agent: *
+Disallow: /cdn/
+
+Sitemap: https://www.ianpike.com/sitemap.xml
