@@ -38,12 +38,9 @@
     <link rel="stylesheet" type="text/css" href="homepage.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-    <!-- Security and Referrer Policies -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; script-src 'self' https://cdnjs.cloudflare.com https://ajax.googleapis.com; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com;">
-    <meta name="referrer" content="no-referrer-when-downgrade">
-
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
 </head>
     
     
@@ -153,10 +150,10 @@
                       <img src="cdn/self/marne_climbing.avif" alt="Profile Picture" class="about-profile-image-rounded">
                     </div>
                     <div class="social-icons">
-                      <a href="https://www.linkedin.com/in/ian-pike-27319083/" target="_blank">
+                      <a href="https://www.linkedin.com/in/ian-pike-27319083/" target="_blank" aria-label="Link to the Ian Pikes LinkedIn">
                         <i class="fab fa-linkedin"></i>
                       </a>
-                      <a href="https://github.com/Rinzii" target="_blank">
+                      <a href="https://github.com/Rinzii" target="_blank" aria-label="Link to the Ian Pikes GitHub">
                         <i class="fab fa-github"></i>
                       </a>
                     </div>
@@ -170,10 +167,10 @@
                         I'm a passionate software engineer who loves building interactive applications, solving problems, and constantly learning new technologies.
                     </p>
                     <div class="tabs">
-                        <button class="tab active" onclick="showTab('skills')">Skills</button>
-                        <button class="tab" onclick="showTab('experience')">Experience</button>
-                        <button class="tab" onclick="showTab('education')">Education</button>
-                        <button class="tab" onclick="showTab('awards')">Awards & Honors</button>
+                        <button class="tab active" onclick="showTab('skills', event)">Skills</button>
+                        <button class="tab" onclick="showTab('experience', event)">Experience</button>
+                        <button class="tab" onclick="showTab('education', event)">Education</button>
+                        <button class="tab" onclick="showTab('awards', event)">Awards & Honors</button>
                     </div>
                     <div class="tab-content active" id="skills">
                         <h2>Programming Experience</h2>
@@ -341,6 +338,6 @@
     
     <script type="text/javascript" src="background.js"></script>
     <script type="text/javascript" src="about.js"></script>
-    <script type="text/javascript" src="obfuscate.js"></script>
+
 </body>
 </html>
