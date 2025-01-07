@@ -113,10 +113,11 @@ canvas {
   overflow: hidden;
   border: 2px solid #fff;
   object-fit: cover;
+  object-position: 50% 0%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 879px) {
   .main-header {
     flex-direction: column;
     align-items: center;
@@ -147,6 +148,7 @@ canvas {
   .profile-image {
     width: 150px;
     height: 150px;
+    object-position: 50% 0%;
   }
 }
 @media (max-width: 480px) {
@@ -179,6 +181,7 @@ canvas {
   .profile-image {
     width: 120px;
     height: 120px;
+    object-position: 50% 0%;
   }
 }
 #works-section {
@@ -283,21 +286,22 @@ canvas {
   color: #ff87c3;
 }
 
-@media (max-width: 768px) {
-  .works-grid {
+@media (max-width: 879px) {
+  #works-section .works-grid {
     grid-template-columns: 1fr;
   }
-  .works-grid .work-item {
+  #works-section .works-grid .work-item {
     cursor: default;
   }
-  .works-grid .work-item img {
+  #works-section .works-grid .work-item img {
     display: none;
   }
-  .works-grid .work-item .work-info {
+  #works-section .works-grid .work-item .work-info {
     position: static;
     background-color: rgba(0, 0, 0, 0.9);
     border-radius: 10px;
     padding: 20px;
+    top: 0;
   }
 }
 #about-section {
@@ -530,7 +534,7 @@ canvas {
   font-size: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 879px) {
   #about-section .about-container {
     flex-direction: column;
     align-items: center;
@@ -541,6 +545,7 @@ canvas {
   #about-section .about-container .about-left-side .profile-section .profile-image-wrapper .about-profile-image-rounded {
     width: 200px;
     height: 200px;
+    object-fit: cover;
   }
   #about-section .about-container .about-right-side {
     max-width: 100%;
@@ -652,7 +657,7 @@ canvas {
     gap: 20px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 879px) {
   #contact-section h1 {
     font-size: 2.5rem;
   }
